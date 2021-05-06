@@ -34,6 +34,5 @@ export CODE_HASH="$(cat code_hash.txt)"
 export IP
 export AZ="${IP} in AZ-${zone}"
 
-# exec bundle exec thin start
-RAILS_ENV=production rake assets:precompile
-exec rails s -e production -b 0.0.0.0
+# exec container command
+exec node server.js
