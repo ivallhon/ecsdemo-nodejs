@@ -1,5 +1,5 @@
 # FROM node:alpine
-FROM alpine:3.6
+FROM public.ecr.aws/x8g8r3n2/alpine:3.6
 
 # set the default NODE_ENV to production
 # for dev/test build with: docker build --build-arg NODE=development .
