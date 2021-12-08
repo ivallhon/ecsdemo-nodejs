@@ -17,11 +17,11 @@ phases:
     commands:
       #- echo '***** run tests:'
       #- npm test -- > testresult.txt
-      - docker build -t ecsdemo-nodejs .
+      - docker build -t ecsdemo-nodejs:$IMAGE_TAG .
   post_build:
     commands:
       # - printf '[{"name":"example-backend","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-      - aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin $ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com
       - docker tag ecsdemo-nodejs:$IMAGE_TAG $ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/ecsdemo-nodejs:$IMAGE_TAG
       - docker push $ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/ecsdemo-nodejs:$IMAGE_TAG
       - echo $IMAGE_TAG > code_hash.txt
