@@ -5,8 +5,8 @@ phases:
     commands:
       - export IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - export ACCOUNT=$(echo $CODEBUILD_BUILD_ARN |cut -f5 -d:)
-      - echo '***** This is the current env:'
-      - printenv
+      # - echo '***** This is the current env:'
+      # - printenv
       #- echo '***** Download nodejs repo:'
       #- curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
       #- echo '***** install nodejs:'
@@ -17,10 +17,13 @@ phases:
     commands:
       #- echo '***** run tests:'
       #- npm test -- > testresult.txt
-      # - docker build -t myimage .
+      - docker build -t ecsdemo-nodejs .
   post_build:
     commands:
-      - printf '[{"name":"example-backend","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      # - printf '[{"name":"example-backend","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin $ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com
+      - docker tag ecsdemo-nodejs:$IMAGE_TAG $ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/ecsdemo-nodejs:$IMAGE_TAG
+      - docker push $ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/ecsdemo-nodejs:$IMAGE_TAG
       - echo $IMAGE_TAG > code_hash.txt
       # - docker pull anchore/cli
       # - docker run -d -v $(pwd):/source-dir -v /var/run/docker.sock:/var/run/docker.sock --name anchore anchore/cli:latest
