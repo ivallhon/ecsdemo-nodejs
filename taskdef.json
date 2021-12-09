@@ -10,9 +10,9 @@
           }
         ],
         "name": "ecsdemo-nodejs"
-      }
+      },
+      "image": "<IMAGE>"
     ],
-    "image": "<IMAGE>",
     "memory": "512",
     "compatibilities": [
       "EC2",
