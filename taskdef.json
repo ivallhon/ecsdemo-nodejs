@@ -9,9 +9,9 @@
             "containerPort": 3000
           }
         ],
-        "name": "ecsdemo-nodejs"
-      },
-      "image": "<IMAGE>"
+        "name": "ecsdemo-nodejs",
+        "image": "<IMAGE>"
+      }
     ],
     "memory": "512",
     "compatibilities": [
