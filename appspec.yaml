@@ -1,0 +1,13 @@
+version: 0.0
+Resources:
+  - TargetService:
+      Type: AWS::ECS::Service
+      Properties:
+        TaskDefinition: <TASK_DEFINITION>
+        LoadBalancerInfo:
+          ContainerName: "ecsdemo-nodejs"
+          ContainerPort: 3000
+        NetworkConfiguration:
+            AwsvpcConfiguration:
+              Subnets: ["subnet-07aaae60732b24965", "subnet-016e77268d9053e6d"]
+              SecurityGroups: ["sg-0af4adf95afa2d909"]
