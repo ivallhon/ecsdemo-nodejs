@@ -1,35 +1,26 @@
 version: 0.2
 
 phases:
-  install:
+  pre_build:
     commands:
       - export IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - export ACCOUNT=$(echo $CODEBUILD_BUILD_ARN |cut -f5 -d:)
-      # - echo '***** This is the current env:'
-      # - printenv
-      #- echo '***** Download nodejs repo:'
-      #- curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
-      #- echo '***** install nodejs:'
-      #- apt-get install -y nodejs build-essential
-      #- echo '***** install our npms:'
-      #- npm install
+      - export REPOSITORY_URI=$ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/ecsdemo-nodejs
   build:
     commands:
-      #- echo '***** run tests:'
-      #- npm test -- > testresult.txt
-      - docker build -t ecsdemo-nodejs:$IMAGE_TAG .
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t $REPOSITORY_URI:latest .
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
-      # - printf '[{"name":"example-backend","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com
-      - docker tag ecsdemo-nodejs:$IMAGE_TAG $ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/ecsdemo-nodejs:$IMAGE_TAG
-      - docker push $ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/ecsdemo-nodejs:$IMAGE_TAG
+      - echo Build completed on `date`
+      - echo Pushing the Docker images...
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo Writing image definitions file...
+      - printf '[{"name":"ecsdemo-nodejs","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
       - echo $IMAGE_TAG > code_hash.txt
-      # - docker pull anchore/cli
-      # - docker run -d -v $(pwd):/source-dir -v /var/run/docker.sock:/var/run/docker.sock --name anchore anchore/cli:latest
-      # - docker exec anchore anchore feeds sync
-      # - docker exec anchore anchore analyze --image myimage --dockerfile /source-dir/Dockerfile
-
+      
 artifacts:
-  files:
-    - '**/*'
+  files: imagedefinitions.json
