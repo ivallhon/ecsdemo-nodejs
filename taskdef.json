@@ -1,23 +1,27 @@
 {
     "executionRoleArn": "arn:aws:iam::302156821030:role/ecsTaskExecutionRole",
     "containerDefinitions": [
-        {
-            "name": "ecsdemo-nodejs",
-            "image": "<IMAGE1_NAME>",
-            "essential": true,
-            "portMappings": [
-                {
-                    "protocol": "tcp",
-                    "containerPort": 3000
-                }
-            ]
-        }
+      {
+        "portMappings": [
+          {
+            "hostPort": 3000,
+            "protocol": "tcp",
+            "containerPort": 3000
+          }
+        ],
+        "name": "ecsdemo-nodejs"
+      }
     ],
+    "memory": "512",
+    "compatibilities": [
+      "EC2",
+      "FARGATE"
+    ],
+    "taskDefinitionArn": "<TASK_DEFINITION>",
+    "family": "ecsdemo",
     "requiresCompatibilities": [
-        "FARGATE"
+      "FARGATE"
     ],
     "networkMode": "awsvpc",
-    "cpu": "256",
-    "memory": "512",
-    "family": "ecsdemo"
-}
+    "cpu": "256"
+  }
