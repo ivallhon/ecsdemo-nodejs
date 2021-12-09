@@ -21,8 +21,8 @@ phases:
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo Writing image definitions file...
-      - printf '[{"name":"ecsdemo-nodejs","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - printf '[{"ImageURI":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imageDetail.json
       - echo $IMAGE_TAG > code_hash.txt
 
 artifacts:
-  files: imagedefinitions.json
+  files: imageDetail.json
