@@ -1,6 +1,5 @@
 {
     "executionRoleArn": "arn:aws:iam::302156821030:role/ecsTaskExecutionRole",
-    "image": "<IMAGE>",
     "containerDefinitions": [
       {
         "portMappings": [
@@ -13,6 +12,7 @@
         "name": "ecsdemo-nodejs"
       }
     ],
+    "image": "<IMAGE>",
     "memory": "512",
     "compatibilities": [
       "EC2",
