@@ -1,5 +1,6 @@
 {
     "executionRoleArn": "arn:aws:iam::302156821030:role/ecsTaskExecutionRole",
+    "image": "<IMAGE>",
     "containerDefinitions": [
       {
         "portMappings": [
